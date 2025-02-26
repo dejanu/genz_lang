@@ -1,7 +1,7 @@
-## mypl
+## genx
 demo
 
-* Best Use: The most creative and impactful use of ... to accelerate development workflows. Show us how ... boosts your productivity, enhances code quality, and supports innovative problem-solving throughout your project.
+* Best Use: The most creative and impactful use of ... to accelerate development workflows. Show us how ... boosts your productivity, enhances code quality, and supports innovative problem-solving throughout your project. 
 
 # Language Features
 
@@ -28,9 +28,3 @@ The first step is scanning, also known as lexing, or lexical analysis. A scanner
 
 The next step is parsing. This is where our syntax gets a grammar—the ability
 to compose larger expressions and statements out of smaller parts
-
-## Grammar
-
-- Assignment: `CAP variable = value`
-- Conditional: `SUS condition { ... }`
-- Print: `BET expression`
