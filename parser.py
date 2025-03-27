@@ -1,9 +1,10 @@
 from lexer import lexer, Token, TOKEN_TYPES
 
 class ASTNode:
-    def __init__(self, type, value=None):
+    def __init__(self, type, value=None, data_type=None):
         self.type = type
         self.value = value
+        self.data_type = data_type  # Add data_type to enforce strong typing
         self.children = []
 
     def __repr__(self):
@@ -45,7 +46,7 @@ class Parser:
         self.eat(TOKEN_TYPES['IDENTIFIER'])
         self.eat(TOKEN_TYPES['EQUAL'])
         expr = self.expression()
-        node = ASTNode('ASSIGN', identifier)
+        node = ASTNode('ASSIGN', identifier, expr.data_type)  # Store type of assigned value
         node.children.append(expr)
         return node
 
@@ -76,8 +77,11 @@ class Parser:
             token = self.current_token()
             if token.value in ('+', '-'):
                 self.eat(TOKEN_TYPES['OPERATOR'])
-                node = ASTNode(token.value, node)
-                node.children.append(self.term())
+                right = self.term()
+                if node.data_type != right.data_type:
+                    self.error("Type mismatch in expression")
+                node = ASTNode(token.value, node, node.data_type)
+                node.children.append(right)
         return node
 
     def term(self):
@@ -86,18 +90,21 @@ class Parser:
             token = self.current_token()
             if token.value in ('*', '/'):
                 self.eat(TOKEN_TYPES['OPERATOR'])
-                node = ASTNode(token.value, node)
-                node.children.append(self.factor())
+                right = self.factor()
+                if node.data_type != right.data_type:
+                    self.error("Type mismatch in term")
+                node = ASTNode(token.value, node, node.data_type)
+                node.children.append(right)
         return node
 
     def factor(self):
         token = self.current_token()
         if token.type == TOKEN_TYPES['NUMBER']:
             self.eat(TOKEN_TYPES['NUMBER'])
-            return ASTNode('NUMBER', token.value)
+            return ASTNode('NUMBER', token.value, 'NUMBER')
         elif token.type == TOKEN_TYPES['IDENTIFIER']:
             self.eat(TOKEN_TYPES['IDENTIFIER'])
-            return ASTNode('IDENTIFIER', token.value)
+            return ASTNode('IDENTIFIER', token.value, 'UNKNOWN')  # Type resolved during interpretation
         elif token.type == TOKEN_TYPES['PAREN'] and token.value == '(':
             self.eat(TOKEN_TYPES['PAREN'])
             node = self.expression()
@@ -105,7 +112,7 @@ class Parser:
             return node
         elif token.type == TOKEN_TYPES['STRING']:
             self.eat(TOKEN_TYPES['STRING'])
-            return ASTNode('STRING', token.value)
+            return ASTNode('STRING', token.value, 'STRING')
         else:
             self.error(f"Unexpected token: {token}")
 

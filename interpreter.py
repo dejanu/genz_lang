@@ -40,7 +40,11 @@ class Interpreter:
     def visit_assign(self, node):
         identifier = node.value
         value = self.visit(node.children[0])
-        self.variables[identifier] = value
+        value_type = node.children[0].data_type
+        if identifier in self.variables:
+            if self.variables[identifier]['type'] != value_type:
+                raise Exception(f"Type mismatch for variable '{identifier}'")
+        self.variables[identifier] = {'value': value, 'type': value_type}
 
     def visit_if(self, node):
         condition = self.visit(node.value)
@@ -53,7 +57,9 @@ class Interpreter:
         return int(node.value)
 
     def visit_identifier(self, node):
-        return self.variables.get(node.value, 0)
+        if node.value not in self.variables:
+            raise Exception(f"Undefined variable '{node.value}'")
+        return self.variables[node.value]['value']
 
     def visit_string(self, node):
         return node.value.strip('"')
@@ -61,21 +67,29 @@ class Interpreter:
     def visit_plus(self, node):
         left = self.visit(node.value)
         right = self.visit(node.children[0])
+        if node.value.data_type != node.children[0].data_type:
+            raise Exception("Type mismatch in addition")
         return left + right
 
     def visit_minus(self, node):
         left = self.visit(node.value)
         right = self.visit(node.children[0])
+        if node.value.data_type != node.children[0].data_type:
+            raise Exception("Type mismatch in subtraction")
         return left - right
 
     def visit_multiply(self, node):
         left = self.visit(node.value)
         right = self.visit(node.children[0])
+        if node.value.data_type != node.children[0].data_type:
+            raise Exception("Type mismatch in multiplication")
         return left * right
 
     def visit_divide(self, node):
         left = self.visit(node.value)
         right = self.visit(node.children[0])
+        if node.value.data_type != node.children[0].data_type:
+            raise Exception("Type mismatch in division")
         return left / right
 
 # Main function to run the interpreter
