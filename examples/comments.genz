@@ -1,0 +1,4 @@
+CAP x = 42 #Assign
+CAP y = "Hello, GenZ!"
+BET x
+BET y

@@ -79,6 +79,30 @@ SUS x {
 }
 ```
 
+### Comments
+GenZ supports single-line comments. Any text following the `#` symbol on a line is treated as a comment and ignored during execution.
+```
+# This is a comment
+CAP x = 42 # Assign 42 to x
+BET x # Print the value of x
+```
+
+## Running a `.genz` File
+
+To run a `.genz` file, use the GenZ interpreter. Follow these steps:
+
+1. Navigate to the project directory:
+   ```bash
+   cd /Users/dej/Desktop/Git_projects/genz_lang
+   ```
+
+2. Run the interpreter with the `.genz` file as an argument:
+   ```bash
+./interpreter.py examples/var_instantiation.genz
+   ```
+
+This will execute the code in the specified `.genz` file and display the output in the console.
+
 ## Running Unit Tests
 
 To ensure the correctness of the implementation, unit tests are provided. Follow these steps to run the tests:

@@ -21,7 +21,9 @@ class Parser:
     def program(self):
         node = ASTNode('PROGRAM')
         while self.current_token_index < len(self.tokens):
-            node.children.append(self.statement())
+            statement = self.statement()
+            if statement is not None:
+                node.children.append(statement)
         return node
 
     def statement(self):
@@ -32,6 +34,10 @@ class Parser:
             return self.assignment_statement()
         elif token.type == TOKEN_TYPES['SUS']:
             return self.conditional_statement()
+        elif token.type == TOKEN_TYPES['UNKNOWN']:
+            # Ignore comments or unknown tokens
+            self.eat(TOKEN_TYPES['UNKNOWN'])
+            return None
         else:
             self.error(f"Unexpected token: {token}")
 
@@ -68,7 +74,9 @@ class Parser:
     def statement_list(self):
         node = ASTNode('STATEMENT_LIST')
         while self.current_token().type != TOKEN_TYPES['BRACE']:
-            node.children.append(self.statement())
+            statement = self.statement()
+            if statement is not None:
+                node.children.append(statement)
         return node
 
     def expression(self):

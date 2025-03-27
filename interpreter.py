@@ -92,6 +92,10 @@ class Interpreter:
             raise Exception("Type mismatch in division")
         return left / right
 
+    def visit_comment(self, node):
+        # Comments are ignored during interpretation
+        pass
+
 # Main function to run the interpreter
 def main():
     if len(sys.argv) != 2:

@@ -1,4 +1,3 @@
-
 import re
 
 # Token types
@@ -49,6 +48,7 @@ class Token:
     def __repr__(self):
         return f'Token({self.type}, {self.value})'
 
+# Update the lexer to handle comments
 def lexer(input_code):
     """
     Tokenizes the given input code into a list of tokens.
@@ -65,20 +65,30 @@ def lexer(input_code):
     input code, it is classified as an UNKNOWN token.
     """
     tokens = []
-    while input_code:
+    lines = input_code.splitlines()
+    for line in lines:
+        if '#' in line:
+            line = line.split('#', 1)[0]  # Remove everything after the `#` symbol
+        tokens.extend(tokenize_line(line))
+    return tokens
+
+def tokenize_line(line):
+    # Tokenize a single line of code
+    tokens = []
+    while line:
         match = None
         for token_regex, token_type in TOKEN_REGEX:
             regex = re.compile(token_regex)
-            match = regex.match(input_code)
+            match = regex.match(line)
             if match:
                 value = match.group(0)
                 if token_type != TOKEN_TYPES['WHITESPACE']:
                     tokens.append(Token(token_type, value))
-                input_code = input_code[len(value):]
+                line = line[len(value):]
                 break
         if not match:
-            tokens.append(Token(TOKEN_TYPES['UNKNOWN'], input_code[0]))
-            input_code = input_code[1:]
+            tokens.append(Token(TOKEN_TYPES['UNKNOWN'], line[0]))
+            line = line[1:]
     return tokens
 
 # Example usage
