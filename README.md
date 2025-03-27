@@ -116,10 +116,17 @@ To run a `.genz` file, use the GenZ interpreter. Follow these steps:
 
 2. Run the interpreter with the `.genz` file as an argument:
    ```bash
-./interpreter.py examples/var_instantiation.genz
+   ./interpreter.py examples/var_instantiation.genz
    ```
 
-This will execute the code in the specified `.genz` file and display the output in the console.
+### Optional: Display the Abstract Syntax Tree (AST)
+
+To display the Abstract Syntax Tree (AST) before executing the code, use the `--show-ast` flag:
+```bash
+./interpreter.py --show-ast examples/var_instantiation.genz
+```
+
+This will output the AST to the console, followed by the execution output.
 
 ## Running Unit Tests
 
@@ -127,7 +134,7 @@ To ensure the correctness of the implementation, unit tests are provided. Follow
 
 1. Navigate to the project directory:
    ```bash
-    cd path/to/your/genz_lang
+   cd path/to/your/genz_lang
    ```
 
 2. Run the tests using the `run_tests.py` script:
