@@ -1,6 +1,0 @@
-CAP x = 10
-SUS x {
-    BET "x is 10"
-} NOSUS {
-    BET "x is not 10"
-}

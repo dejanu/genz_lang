@@ -1,5 +1,0 @@
-CAP x = "Hello, GenZ!"
-BET x
-
-CAP x = "Hello"
-BET x
