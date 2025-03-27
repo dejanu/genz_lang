@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Interpreter for the GenX programming language
+# Interpreter for the GenZ programming language
 import sys
 from parser import Parser
 from lexer import lexer, TOKEN_TYPES
@@ -81,7 +81,7 @@ class Interpreter:
 # Main function to run the interpreter
 def main():
     if len(sys.argv) != 2:
-        print("Usage: genx <file>")
+        print("Usage: genz <file>")
         sys.exit(1)
 
     filename = sys.argv[1]
