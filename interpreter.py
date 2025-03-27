@@ -3,18 +3,21 @@
 
 # Interpreter for the GenZ programming language
 import sys
+import argparse
 from parser import Parser
 from lexer import lexer, TOKEN_TYPES
 
 class Interpreter:
-    def __init__(self, ast):
+    def __init__(self, ast, show_ast=False):
         self.ast = ast
         self.variables = {}
+        self.show_ast = show_ast
 
     def interpret(self):
-        print("Abstract Syntax Tree (AST):")
-        print(self.ast)
-        print("\nExecution Output:")
+        if self.show_ast:
+            print("Abstract Syntax Tree (AST):")
+            print(self.ast)
+            print("\nExecution Output:")
         self.visit(self.ast)
 
     def visit(self, node):
@@ -120,18 +123,19 @@ class Interpreter:
 
 # Main function to run the interpreter
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: genz <file>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="GenZ Language Interpreter")
+    parser.add_argument("file", help="The GenZ source file to execute")
+    parser.add_argument("--show-ast", action="store_true", help="Show the Abstract Syntax Tree (AST)")
+    args = parser.parse_args()
 
-    filename = sys.argv[1]
-    with open(filename, 'r') as file:
+    with open(args.file, 'r') as file:
         code = file.read()
 
     tokens = lexer(code)
     parser = Parser(tokens)
     ast = parser.parse()
-    interpreter = Interpreter(ast)
+    interpreter = Interpreter(ast, show_ast=args.show_ast)
+
     interpreter.interpret()
 
 if __name__ == "__main__":

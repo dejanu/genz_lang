@@ -3,14 +3,17 @@
 GenZ is a simple interpreted programming language designed for educational purposes. It features basic constructs for printing, variable assignment, and conditional statements.
 
 ## Purpose
-The purpose of GenZ is to provide a minimalistic language that can be used to demonstrate the fundamental concepts of language design, lexical analysis, parsing, and interpretation.
+
+**TL;DR** The language is called genZ, and draws its grammatical inspiration from Generation Z slang. It uses keywords like BET for printing, CAP for assignment and for conditionals SUS and NOSUS first prompt here. 
+The purpose of GenZ is to provide a minimalistic language that can be used to demonstrate the fundamental concepts of language design, lexical analysis, parsing, and interpretation. 
+
 
 ## Language Features
 
 * Interpreted language (tree-walk interpreter)
 * **Statically typed** (variables must be declared with a specific type)
 * **Strongly typed** (no implicit type conversions)
-* Define Grammar (instructions on how to write statements for the programming language)
+* Defined Grammar (instructions on how to write statements for the programming language)
 
 ## Typing System
 
