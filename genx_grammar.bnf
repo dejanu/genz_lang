@@ -1,4 +1,3 @@
-
 <program> ::= <statement_list>
 
 <statement_list> ::= <statement> | <statement> <statement_list>
@@ -9,7 +8,9 @@
 
 <assignment_statement> ::= "CAP" <identifier> "=" <expression>
 
-<conditional_statement> ::= "SUS" <expression> "{" <statement_list> "}" "NOSUS" "{" <statement_list> "}"
+<conditional_statement> ::= "SUS" <comparison> "{" <statement_list> "}" "NOSUS" "{" <statement_list> "}"
+
+<comparison> ::= <expression> ("==" | "!=" | ">" | "<" | ">=" | "<=") <expression>
 
 <expression> ::= <term> | <term> "+" <expression> | <term> "-" <expression>
 

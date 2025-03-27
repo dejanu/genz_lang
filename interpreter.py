@@ -41,9 +41,7 @@ class Interpreter:
         identifier = node.value
         value = self.visit(node.children[0])
         value_type = node.children[0].data_type
-        if identifier in self.variables:
-            if self.variables[identifier]['type'] != value_type:
-                raise Exception(f"Type mismatch for variable '{identifier}'")
+        # Store the variable with its resolved type
         self.variables[identifier] = {'value': value, 'type': value_type}
 
     def visit_if(self, node):
@@ -59,6 +57,8 @@ class Interpreter:
     def visit_identifier(self, node):
         if node.value not in self.variables:
             raise Exception(f"Undefined variable '{node.value}'")
+        # Resolve the type of the identifier
+        node.data_type = self.variables[node.value]['type']
         return self.variables[node.value]['value']
 
     def visit_string(self, node):
@@ -95,6 +95,28 @@ class Interpreter:
     def visit_comment(self, node):
         # Comments are ignored during interpretation
         pass
+
+    def visit_comparison(self, node):
+        left = self.visit(node.children[0])
+        right = self.visit(node.children[1])
+        operator = node.value
+        # Ensure both sides are numbers for comparison
+        if not isinstance(left, (int, float)) or not isinstance(right, (int, float)):
+            raise Exception(f"Invalid comparison between incompatible types: {type(left)} and {type(right)}")
+        if operator == "==":
+            return left == right
+        elif operator == "!=":
+            return left != right
+        elif operator == ">":
+            return left > right
+        elif operator == "<":
+            return left < right
+        elif operator == ">=":
+            return left >= right
+        elif operator == "<=":
+            return left <= right
+        else:
+            raise Exception(f"Unknown comparison operator: {operator}")
 
 # Main function to run the interpreter
 def main():

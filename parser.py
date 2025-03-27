@@ -14,6 +14,7 @@ class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
         self.current_token_index = 0
+        self.symbol_table = {}  # Add a symbol table to track variable types
 
     def parse(self):
         return self.program()
@@ -52,13 +53,15 @@ class Parser:
         self.eat(TOKEN_TYPES['IDENTIFIER'])
         self.eat(TOKEN_TYPES['EQUAL'])
         expr = self.expression()
-        node = ASTNode('ASSIGN', identifier, expr.data_type)  # Store type of assigned value
+        # Store the type of the variable in the symbol table
+        self.symbol_table[identifier] = expr.data_type
+        node = ASTNode('ASSIGN', identifier, expr.data_type)
         node.children.append(expr)
         return node
 
     def conditional_statement(self):
         self.eat(TOKEN_TYPES['SUS'])
-        condition = self.expression()
+        condition = self.comparison()
         self.eat(TOKEN_TYPES['BRACE'])
         true_branch = self.statement_list()
         self.eat(TOKEN_TYPES['BRACE'])
@@ -112,7 +115,9 @@ class Parser:
             return ASTNode('NUMBER', token.value, 'NUMBER')
         elif token.type == TOKEN_TYPES['IDENTIFIER']:
             self.eat(TOKEN_TYPES['IDENTIFIER'])
-            return ASTNode('IDENTIFIER', token.value, 'UNKNOWN')  # Type resolved during interpretation
+            # Resolve the type of the identifier from the symbol table
+            data_type = self.symbol_table.get(token.value, 'UNKNOWN')
+            return ASTNode('IDENTIFIER', token.value, data_type)
         elif token.type == TOKEN_TYPES['PAREN'] and token.value == '(':
             self.eat(TOKEN_TYPES['PAREN'])
             node = self.expression()
@@ -123,6 +128,23 @@ class Parser:
             return ASTNode('STRING', token.value, 'STRING')
         else:
             self.error(f"Unexpected token: {token}")
+
+    def comparison(self):
+        left = self.expression()
+        token = self.current_token()
+        if token.type == TOKEN_TYPES['COMPARISON']:  # Use the correct token type
+            self.eat(TOKEN_TYPES['COMPARISON'])
+            right = self.expression()
+            # Allow comparisons only between compatible types
+            if left.data_type != right.data_type:
+                if not (left.data_type == 'NUMBER' and right.data_type == 'NUMBER'):
+                    self.error(f"Type mismatch in comparison: {left.data_type} vs {right.data_type}")
+            node = ASTNode('COMPARISON', token.value)
+            node.children.append(left)
+            node.children.append(right)
+            return node
+        else:
+            self.error(f"Expected comparison operator, but got {token.value}")
 
     def eat(self, token_type):
         if self.current_token().type == token_type:

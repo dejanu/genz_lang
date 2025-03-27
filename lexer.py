@@ -14,7 +14,8 @@ TOKEN_TYPES = {
     'BRACE': 'BRACE',
     'EQUAL': 'EQUAL',
     'WHITESPACE': 'WHITESPACE',
-    'UNKNOWN': 'UNKNOWN'
+    'UNKNOWN': 'UNKNOWN',
+    'COMPARISON': 'COMPARISON'  # Add a new token type for comparison operators
 }
 
 # Token regex patterns
@@ -31,6 +32,7 @@ TOKEN_REGEX = [
     (r'[{}]', TOKEN_TYPES['BRACE']),
     (r'=', TOKEN_TYPES['EQUAL']),
     (r'\s+', TOKEN_TYPES['WHITESPACE']),
+    (r'==|!=|>=|<=|>|<', TOKEN_TYPES['COMPARISON'])  # Add regex for comparison operators
 ]
 
 class Token:

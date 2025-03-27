@@ -70,14 +70,32 @@ CAP x = 10
 ```
 
 ### Conditional Statement
-The `SUS` and `NOSUS` statements are used for conditional execution.
+The `SUS` and `NOSUS` statements are used for conditional execution. These statements evaluate a condition and execute the corresponding block of code based on whether the condition is true or false.
+
+#### Syntax
 ```
-SUS x {
-    BET "x is true"
+SUS <condition> {
+   // Code to execute if the condition is true
 } NOSUS {
-    BET "x is false"
+   // Code to execute if the condition is false
 }
 ```
+
+#### Example
+```genz
+CAP x = 10
+CAP y = 20
+
+SUS x > y {
+   BET "x is greater than y"
+} NOSUS {
+   BET "x is not greater than y"
+}
+```
+
+In this example:
+- If `x > y` evaluates to `true`, the message `"x is greater than y"` will be printed.
+- Otherwise, the message `"x is not greater than y"` will be printed.
 
 ### Comments
 GenZ supports single-line comments. Any text following the `#` symbol on a line is treated as a comment and ignored during execution.
